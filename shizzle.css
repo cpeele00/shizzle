@@ -1,0 +1,140 @@
+.shizzle {
+  width: 100%;
+  display: none;
+  border-radius: 2px;
+}
+
+
+.shizzlex {
+  width: 100%;
+  position: relative;
+  border-radius: 2px;
+  z-index: 10000;
+  background-color: #fff;
+}
+
+
+.shizzlex .pills {
+  padding: 6px;
+  list-style-type: none;
+  width: 100%;
+  border: 1px solid #ccc;
+  height: auto;
+  box-sizing: border-box;
+  margin-bottom: 0;
+  margin-top: 0;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.shizzlex.is-required {
+  border: 1px solid crimson;
+}
+
+.shizzlex.validation-message {
+  background: transparent !important;
+  z-index: 100;
+}
+
+.pills > .pill {
+  display: inline-block;
+  margin-right: 2px;
+  margin-bottom: 5px;
+  background-color: #def1fa;
+  padding: 5px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #1c8dc8;
+  box-sizing: border-box;
+}
+
+
+.shizzlex .choices {
+  list-style-type: none;
+  margin-top: -1px;
+  padding-left: 0px;
+  border: 1px solid #ccc;
+  border-top: 0;
+  position: absolute;
+  cursor: pointer;
+  overflow-y: auto;
+  background-color: #fff;
+  padding-right: 0px;
+  box-sizing: border-box;
+  padding: 5px;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: nowrap;
+  height: 150px;
+  max-height: 200px;
+}
+
+.choices li {
+  height: 25px;
+  color: #333;
+}
+
+
+.fa.fa-close {
+  cursor: pointer;
+}
+
+.search-box-container {
+  display: inline-block;
+}
+
+.search-box {
+  border: 0;
+  outline: none;
+  box-shadow: 0 0 0 #fff !important;
+}
+
+.search-box:focus {
+  box-shadow: 0 0 0 #fff !important;
+}
+
+.close {
+  position: relative;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  overflow: hidden;
+  top: 2px;
+}
+
+.close:hover::before, .close:hover::after {
+  background: #1c8dc8;
+}
+
+.close::before, .close::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  top: 50%;
+  left: 0;
+  margin-top: -1px;
+  background: #1c8dc8;
+}
+
+.close::before {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.close::after {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.close.hairline::before, .close.hairline::after {
+  height: 1px;
+}
