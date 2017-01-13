@@ -1,13 +1,13 @@
 {
   "name": "shizzle",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "a simple multiselect control with a simple api",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "readmeFilename": "README.md",
-  "files": ["index.js", "shizzle.css", "README.md"],
+  "files": ["index.js", "shizzle.css", "README.md", "dist"],
   "author": "Chris Peele aka Sweet Biscuits",
   "license": "ISC",
   "repository": {
