@@ -1,6 +1,6 @@
 {
   "name": "shizzle",
-  "version": "1.0.23",
+  "version": "1.0.25",
   "description": "a simple multiselect control with a simple api",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,14 @@
   "files": ["index.js", "shizzle.css", "README.md"],
   "author": "Chris Peele aka Sweet Biscuits",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cpeele00/shizzle"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "jquery": "^3.1.1"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   }

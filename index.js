@@ -1,3 +1,5 @@
+var $ = require('jquery');
+var _ = require('lodash');
 
 
 function Shizzle(id, dataFields, options){
