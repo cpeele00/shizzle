@@ -6,8 +6,10 @@ I'll provide a quick sample usage for now. More details coming soon! I'll have t
 
 **NOTE** requires **jquery and lodash** (yes, one day soon I'll remove the dependency on jquery...but I was in a time crunch)
 
+ ![Alt text](shizzle.gif)
+
 ## Coming Soon!
-Github repo, live demo and better documentation, and installable dependencies...bear with me guys :-)
+Live demo and better documentation...bear with me guys :-)
 
       // Here's the mark up you will need
       <select id="my-filter" class="shizzle"></select>
