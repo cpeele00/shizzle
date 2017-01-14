@@ -24,6 +24,7 @@ function Shizzle(id, dataFields, options){
   var validationMessageCss = null;
   var validationMessageText = null;
   var validationTriggered = false;
+  var placeholder = '';
 
   self.dataSource = null;
   self.items = [];
@@ -61,6 +62,7 @@ function Shizzle(id, dataFields, options){
       showValidationMessage = options.showValidationMessage || false;
       validationMessageCss = options.validationMessageCss || nulll;
       validationMessageText = options.validationMessageText || null;
+      placeholder = options.placeholder || '';
     }
 
     // Set data source
@@ -176,7 +178,7 @@ function Shizzle(id, dataFields, options){
       // Toggle items
       $items.toggle();
 
-      addPill(self.selectedItem);
+      self.addPill(self.selectedItem);
 
       // Fire onItemSelected callback if provided
       if (onItemSelected)
@@ -209,7 +211,7 @@ function Shizzle(id, dataFields, options){
     var selectContainer = document.createElement('div');
     selectContainer.id = 'shizzle-container-' + id;
     selectContainer.className = 'shizzlex';
-    selectContainer.innerHTML = '<ul class=\'shizzlex pills\'><li class=\'search-box-container\'><input type=\'text\' class=\'search-box\'/></li></ul><ul class=\'shizzlex choices\'></ul>';
+    selectContainer.innerHTML = '<ul class=\'shizzlex pills\'><li class=\'search-box-container\'><input type=\'text\' placeholder="' + placeholder + '" class=\'search-box\'/></li></ul><ul class=\'shizzlex choices\'></ul>';
 
     insertAfter(selectContainer, mainSelectElement);
   }
@@ -255,7 +257,60 @@ function Shizzle(id, dataFields, options){
     });
   }
 
-  function addPill(selectedItem){
+  function addFilteredItem(item) {
+    var itemExists = false;
+
+    // Verify if item already exists in filtered array
+    _.forEach(self.filteredItems, function (filteredItem) {
+      if (filteredItem[dataValue] === item[dataValue])
+        itemExists = true;
+    });
+
+    if (!itemExists) {
+      // Add item to filtered array
+      self.filteredItems.push(item);
+    }
+  }
+
+  function insertAfter(el, referenceNode) {
+    referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+  }
+
+  function fireValidation(){
+    if (isRequired){
+      validationTriggered = true;
+
+      if (self.pills.length === 0){
+        self.$pillContainer.addClass(fieldErrorCss);
+
+        if (showValidationMessage)
+          showValidationMessageText();
+
+      } else {
+        self.$pillContainer.removeClass(fieldErrorCss);
+      }
+    }
+  }
+
+  function createValidationMessage(){
+    var spanMessage = document.createElement('span');
+    spanMessage.className = 'shizzlex validation-message ' + validationMessageCss;
+    spanMessage.innerText = validationMessageText;
+    spanMessage.style.display = 'none';
+
+    var parentEl = document.getElementById('shizzle-container-' + id);
+    insertAfter(spanMessage, parentEl);
+  }
+
+  function showValidationMessageText(){
+    $('.' + validationMessageCss).show();
+  }
+
+  function hideValidationMessageText(){
+    $('.' + validationMessageCss).hide();
+  }
+
+  this.addPill = function(selectedItem){
     self.pills.push(selectedItem);
 
     var pillElement = document.createElement('li');
@@ -281,28 +336,9 @@ function Shizzle(id, dataFields, options){
       hideValidationMessageText();
 
     populateList(self.items);
-  }
+  };
 
-  function addFilteredItem(item) {
-    var itemExists = false;
-
-    // Verify if item already exists in filtered array
-    _.forEach(self.filteredItems, function (filteredItem) {
-      if (filteredItem[dataValue] === item[dataValue])
-        itemExists = true;
-    });
-
-    if (!itemExists) {
-      // Add item to filtered array
-      self.filteredItems.push(item);
-    }
-  }
-
-  function insertAfter(el, referenceNode) {
-    referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
-  }
-
-  function clearData(){
+  this.clearData = function(){
     self.dataSource = null;
     self.items = null;
     self.pills.length = 0;
@@ -316,51 +352,7 @@ function Shizzle(id, dataFields, options){
 
     if (onItemsCleared)
       onItemsCleared();
-  }
-
-
-  function fireValidation(){
-    if (isRequired){
-      validationTriggered = true;
-
-      if (self.pills.length === 0){
-        self.$pillContainer.addClass(fieldErrorCss);
-
-        if (showValidationMessage)
-          showValidationMessageText();
-
-      } else {
-        self.$pillContainer.removeClass(fieldErrorCss);
-      }
-    }
-  }
-
-
-  function createValidationMessage(){
-    var spanMessage = document.createElement('span');
-    spanMessage.className = 'shizzlex validation-message ' + validationMessageCss;
-    spanMessage.innerText = validationMessageText;
-    spanMessage.style.display = 'none';
-
-    var parentEl = document.getElementById('shizzle-container-' + id);
-    insertAfter(spanMessage, parentEl);
-  }
-
-
-  function showValidationMessageText(){
-    $('.' + validationMessageCss).show();
-  }
-
-
-  function hideValidationMessageText(){
-    $('.' + validationMessageCss).hide();
-  }
-
-
-
-  //
-  // Protected methods
-  //
+  };
 
   this.populateWithData = function(data) {
     // Set data source
@@ -370,13 +362,9 @@ function Shizzle(id, dataFields, options){
     populateList(self.items);
   };
 
-  this.clearData = function() {
-    clearData();
-  };
-
-  this.fireValidation = function(){
+  this.validateControl = function(){
     fireValidation();
-  }
+  };
 };
 
 
@@ -387,6 +375,13 @@ function Shizzle(id, dataFields, options){
 
 Shizzle.prototype.getSelectedItems = function(){
   return this.pills;
+};
+
+Shizzle.prototype.setSelectedItems = function(selectedItems){
+  var self = this;
+  _.forEach(selectedItems, function(item) {
+    self.addPill(item);
+  });
 };
 
 Shizzle.prototype.clear = function() {
@@ -404,8 +399,16 @@ Shizzle.prototype.isValid = function(){
     return true;
 };
 
+/**
+ * @deprecated Since version 1.1.0 Will be deleted in version 1.2.0 Use validate() instead.
+ */
 Shizzle.prototype.fireValidation = function(){
-  this.fireValidation();
+  console.warn('fireValidation is deprecated since version 1.1.0 . Use validate() instead.');
+  this.validateControl();
+};
+
+Shizzle.prototype.validate = function(){
+  this.validateControl();
 };
 
 

@@ -1,17 +1,20 @@
 # Shizzle
 
-Documenation coming soon I promise. Had to write this in 1 day because I got tired of dealing with Select2's weird api and had a tight deadline to meet.
-
-I'll provide a quick sample usage for now. More details coming soon! I'll have this whole thing tightened up by end of week. Until then **Use at own risk**
-
-**NOTE** requires **jquery and lodash** (yes, one day soon I'll remove the dependency on jquery...but I was in a time crunch)
+Better documenation coming soon I promise. Had to write this in 1 day because I got tired of dealing with Select2's weird api and had a tight deadline to meet.
 
  ![Alt text](shizzle.gif)
 
 ## Coming Soon!
-Live demo and better documentation...bear with me guys :-)
+Live demo, better documentation and evetually removing the dependency on jQuery.
 
-      // Here's the mark up you will need
+## Recent Changes
+* You can now set default data upon load ( setSelectedItems() ). 
+* Also added placeholder support. 
+* fireValidation() is now deprecated. Please use validate() instead.
+
+## Example Usage
+
+      // Here's the markup you will need
       <select id="my-filter" class="shizzle"></select>
 
 
@@ -35,6 +38,7 @@ Live demo and better documentation...bear with me guys :-)
         itemsVisibleOnPageLoad: false,
         setToFocusOnPageLoad: true,
         isRequired: false,
+        placeholder: 'type something here...',
         fieldErrorCss: '[your css class here]',
         showValidationMessage: false,
         validationMessageCss: '[your css class here]',
@@ -50,7 +54,9 @@ Live demo and better documentation...bear with me guys :-)
       
       multiSelect.populate(movies);
 
-      multiSelect.fireValidation();
+      multiSelect.validate();
+
+      multiSelect.setSelectedItems([{text: 'Oblivion', value: 'oblivion', value2: 'scifi'}]);
 
       var isValid = multiSelect.isValid();
 
