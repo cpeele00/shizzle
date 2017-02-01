@@ -13,7 +13,7 @@ Live demo, better documentation and evetually removing the dependency on jQuery.
 * fireValidation() is now deprecated. Please use validate() instead.
 
 ## Example Usage
-
+```javascript
       // Here's the markup you will need
       <select id="my-filter" class="shizzle"></select>
 
@@ -61,3 +61,4 @@ Live demo, better documentation and evetually removing the dependency on jQuery.
       var isValid = multiSelect.isValid();
 
       var selectedItems =  multiSelect.getSelectedItems();
+```
