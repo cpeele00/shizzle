@@ -31,8 +31,8 @@ Live demo, better documentation and evetually removing the dependency on jQuery.
       var multiSelect = new Shizzle('my-filter', {
         dataValue: 'value', // required to map your fields
         dataText: 'text', // required to map your fields
-        dataValue2: 'whatever you want here", // optional. Because sometimes a guy just needs to pass in some additional data
-        dataValue3: 'whatever you want here", // optional. Because sometimes a guy just needs to pass in some additional data
+        dataValue2: 'whatever you want here', // optional. Because sometimes a guy just needs to pass in some additional data
+        dataValue3: 'whatever you want here', // optional. Because sometimes a guy just needs to pass in some additional data
       }, {
         data: movies, //optional...or you can use the public method "populate()"
         itemsVisibleOnPageLoad: false,
