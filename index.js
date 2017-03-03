@@ -74,9 +74,9 @@ function Shizzle(id, dataFields, options){
     createMainShizzleContainer(select, id);
 
     // Initialize dynamically created containers
-    $items = $('#shizzle-container-' + id).find('.choices');
-    $searchBox = $('#shizzle-container-' + id).find('.search-box');
-    self.$pillContainer = $('#shizzle-container-' + id).find('.pills');
+    $items = $('#shizzle-container-' + id).find('.sz-choices');
+    $searchBox = $('#shizzle-container-' + id).find('.sz-search-box');
+    self.$pillContainer = $('#shizzle-container-' + id).find('.sz-pills');
 
 
     if (isRequired && showValidationMessage)
@@ -163,7 +163,7 @@ function Shizzle(id, dataFields, options){
   }
 
   function handleItemSelected() {
-    $(document).on('click', '#shizzle-container-' + id + ' .choices li', function() {
+    $(document).on('click', '#shizzle-container-' + id + ' .sz-choices li', function() {
 
       // Get the selectedItem text
       self.selectedItem = {
@@ -211,7 +211,7 @@ function Shizzle(id, dataFields, options){
     var selectContainer = document.createElement('div');
     selectContainer.id = 'shizzle-container-' + id;
     selectContainer.className = 'shizzlex';
-    selectContainer.innerHTML = '<ul class=\'shizzlex pills\'><li class=\'search-box-container\'><input type=\'text\' placeholder="' + placeholder + '" class=\'search-box\'/></li></ul><ul class=\'shizzlex choices\'></ul>';
+    selectContainer.innerHTML = '<ul class=\'shizzlex sz-pills\'><li class=\'sz-search-box-container\'><input type=\'text\' placeholder="' + placeholder + '" class=\'sz-search-box\'/></li></ul><ul class=\'shizzlex sz-choices\'></ul>';
 
     insertAfter(selectContainer, mainSelectElement);
   }
@@ -228,7 +228,7 @@ function Shizzle(id, dataFields, options){
   }
 
   function handlePillClicked(){
-    $(document).on('click', '#shizzle-container-' + id + ' .pills li', function(e) {
+    $(document).on('click', '#shizzle-container-' + id + ' .sz-pills li', function(e) {
       
       var selectedPill = {};
       selectedPill[dataValue] = $(this).data('value');
@@ -294,7 +294,7 @@ function Shizzle(id, dataFields, options){
 
   function createValidationMessage(){
     var spanMessage = document.createElement('span');
-    spanMessage.className = 'shizzlex validation-message ' + validationMessageCss;
+    spanMessage.className = 'shizzlex sz-validation-message ' + validationMessageCss;
     spanMessage.innerText = validationMessageText;
     spanMessage.style.display = 'none';
 
@@ -319,11 +319,11 @@ function Shizzle(id, dataFields, options){
     pillElement.setAttribute('data-value', selectedItem.value);
     pillElement.setAttribute('data-value-2', selectedItem.value2);
     pillElement.setAttribute('data-value-3', selectedItem.value3);
-    pillElement.className = 'pill';
-    pillElement.innerHTML = '<span>' + selectedItem.text + '</span><span class=\'close hairline\'></span>';
-    $(pillElement).insertBefore($('#shizzle-container-' + id).find('.search-box').parent());
+    pillElement.className = 'sz-pill';
+    pillElement.innerHTML = '<span>' + selectedItem.text + '</span><span class=\'sz-close sz-hairline\'></span>';
+    $(pillElement).insertBefore($('#shizzle-container-' + id).find('.sz-search-box').parent());
 
-    $pills = $('#shizzle-container-' + id).find('.pill');
+    $pills = $('#shizzle-container-' + id).find('.sz-pill');
 
     _.remove(self.items, function(item){
       return item[dataValue] === selectedItem.value;
