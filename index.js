@@ -21,7 +21,7 @@ function Shizzle(id, dataFields, options){
   var isRequired = false;
   var fieldErrorCss = null;
   var showValidationMessage = false;
-  var validationMessageCss = null;
+  var validationMessageCss = null; 
   var validationMessageText = null;
   var validationTriggered = false;
   var placeholder = '';
