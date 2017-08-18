@@ -12,6 +12,7 @@ function Shizzle(id, dataFields, options){
   var dataValue = null;
   var dataValue2 = null;
   var dataValue3 = null;
+  var dataValue4 = null;
   var data = null;
   var itemsVisibleOnPageLoad = false;
   var setToFocusOnPageLoad = false;
@@ -25,6 +26,7 @@ function Shizzle(id, dataFields, options){
   var validationMessageText = null;
   var validationTriggered = false;
   var placeholder = '';
+  var shouldRepopulateOnRemove = true;
 
   self.dataSource = null;
   self.items = [];
@@ -63,6 +65,7 @@ function Shizzle(id, dataFields, options){
       validationMessageCss = options.validationMessageCss || nulll;
       validationMessageText = options.validationMessageText || null;
       placeholder = options.placeholder || '';
+      shouldRepopulateOnRemove = options.shouldRepopulateOnRemove || true;
     }
 
     // Set data source
@@ -170,7 +173,8 @@ function Shizzle(id, dataFields, options){
         value: $(this).data('value'),
         text: $(this).text(),
         value2: $(this).attr('data-value-2'),
-        value3: $(this).attr('data-value-3')
+        value3: $(this).attr('data-value-3'),
+        value4: $(this).attr('data-value-4')
       };
 
       $searchBox.val('');
@@ -204,6 +208,7 @@ function Shizzle(id, dataFields, options){
       dataText = dataFields.dataText;
       dataValue2 = dataFields.dataValue2;
       dataValue3 = dataFields.dataValue3;
+      dataValue4 = dataFields.dataValue4;
     }
   }
 
@@ -223,7 +228,7 @@ function Shizzle(id, dataFields, options){
     $items.empty();
 
     _.forEach(data, function (item) {
-      $items.append("<li data-value='" + item[dataValue] + "' data-value-2='" + item[dataValue2] + "' data-value-3='" + item[dataValue3] + "'>" + item[dataText] + '</li>');
+      $items.append("<li data-value='" + item[dataValue] + "' data-value-2='" + item[dataValue2] + "' data-value-3='" + item[dataValue3] + "' data-value-4='" + item[dataValue4] + "'>" + item[dataText] + '</li>');
     });
   }
 
@@ -235,8 +240,19 @@ function Shizzle(id, dataFields, options){
       selectedPill[dataText] = $(this).data('text');
       selectedPill[dataValue2] = $(this).attr('data-value-2');
       selectedPill[dataValue3] = $(this).attr('data-value-3');
+      selectedPill[dataValue4] = $(this).attr('data-value-4');
 
-      self.items.push(selectedPill);
+      var result = true;
+
+      if ($.isFunction(shouldRepopulateOnRemove))
+        shouldRepopulateOnRemove(selectedPill);		
+      else		
+        result = shouldRepopulateOnRemove;		
+
+
+      if (result)
+        self.items.push(selectedPill);
+
 
       _.remove(self.pills, function(pill){
         return pill.value === selectedPill[dataValue];
@@ -319,6 +335,7 @@ function Shizzle(id, dataFields, options){
     pillElement.setAttribute('data-value', selectedItem.value);
     pillElement.setAttribute('data-value-2', selectedItem.value2);
     pillElement.setAttribute('data-value-3', selectedItem.value3);
+    pillElement.setAttribute('data-value-4', selectedItem.value4);
     pillElement.className = 'sz-pill';
     pillElement.innerHTML = '<span>' + selectedItem.text + '</span><span class=\'sz-close sz-hairline\'></span>';
     $(pillElement).insertBefore($('#shizzle-container-' + id).find('.sz-search-box').parent());

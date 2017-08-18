@@ -8,6 +8,7 @@ Better documenation coming soon I promise. Had to write this in 1 day because I 
 Live demo, better documentation and evetually removing the dependency on jQuery.
 
 ## Recent Changes
+* Added support for another dataValue container. dataValue4
 * You can now set default data upon load ( setSelectedItems() ). 
 * Also added placeholder support. 
 * fireValidation() is now deprecated. Please use validate() instead.
@@ -33,6 +34,7 @@ Live demo, better documentation and evetually removing the dependency on jQuery.
         dataText: 'text', // required to map your fields
         dataValue2: 'whatever you want here', // optional. Because sometimes a guy just needs to pass in some additional data
         dataValue3: 'whatever you want here', // optional. Because sometimes a guy just needs to pass in some additional data
+        dataValue4: 'whatever you want here', // optional. Because sometimes a guy just needs to pass in some additional data
       }, {
         data: movies, //optional...or you can use the public method "populate()"
         itemsVisibleOnPageLoad: false,
