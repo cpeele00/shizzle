@@ -47,7 +47,15 @@ Live demo, better documentation and evetually removing the dependency on jQuery.
         validationMessageText: 'Recipient List is required',
         onItemSelected: yourCallbackHere,
         onPillRemoved: yourOtherCallback,
-        onItemsCleared: yourOtherCallbackHere
+        onItemsCleared: yourOtherCallbackHere,
+        /* 
+        [shouldRepopulateOnRemove] (optional)
+          -can be either a function or value
+          -is used to more or less do a "check" before adding a pill back to the list of available options
+            -true: the pill will be added back to the list of selectable options
+            -false: the pill will not be added.
+        */
+        shouldRepopulateOnRemove: // Can be either a function that returns a bool or just a bool
       });
 
 
