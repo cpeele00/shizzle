@@ -78,7 +78,7 @@ function Shizzle(id, dataFields, options){
 
     // Initialize dynamically created containers
     $items = $('#shizzle-container-' + id).find('.sz-choices');
-    $searchBox = $('#shizzle-container-' + id).find('.sz-search-box');
+    $searchBox = $('#shizzle-container-' + id).find('[search-box]');
     self.$pillContainer = $('#shizzle-container-' + id).find('.sz-pills');
 
 
@@ -216,7 +216,7 @@ function Shizzle(id, dataFields, options){
     var selectContainer = document.createElement('div');
     selectContainer.id = 'shizzle-container-' + id;
     selectContainer.className = 'shizzlex';
-    selectContainer.innerHTML = '<ul class=\'shizzlex sz-pills\'><li class=\'sz-search-box-container\'><input type=\'text\' placeholder="' + placeholder + '" class=\'sz-search-box\'/></li></ul><ul class=\'shizzlex sz-choices\'></ul>';
+    selectContainer.innerHTML = '<ul class=\'shizzlex sz-pills\'><li class=\'sz-search-box-container\'><input type=\'text\' search-box placeholder="' + placeholder + '" class=\'sz-search-box\' style=\'width: 100%; border: 0; outline: none; box-shadow: 0 0 0 #fff !important; -webkit-box-shadow: 0 0 0 #fff !important;\'/></li></ul><ul class=\'shizzlex sz-choices\'></ul>';
 
     insertAfter(selectContainer, mainSelectElement);
   }
@@ -338,7 +338,7 @@ function Shizzle(id, dataFields, options){
     pillElement.setAttribute('data-value-4', selectedItem.value4);
     pillElement.className = 'sz-pill';
     pillElement.innerHTML = '<span>' + selectedItem.text + '</span><span class=\'sz-close sz-hairline\'></span>';
-    $(pillElement).insertBefore($('#shizzle-container-' + id).find('.sz-search-box').parent());
+    $(pillElement).insertBefore($('#shizzle-container-' + id).find('[search-box]').parent());
 
     $pills = $('#shizzle-container-' + id).find('.sz-pill');
 

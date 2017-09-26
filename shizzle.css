@@ -82,7 +82,7 @@
 }
 
 .sz-search-box-container {
-  display: inline-block;
+  display: block;
 }
 
 .sz-search-box {
