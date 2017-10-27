@@ -3,6 +3,8 @@ var _ = require('lodash');
 
 
 function Shizzle(id, dataFields, options){
+  'use strict';
+
   var self = this;
   var id = id;
   var $searchBox = null;
@@ -62,7 +64,7 @@ function Shizzle(id, dataFields, options){
       fieldErrorCss =  options.fieldErrorCss || null;
       isRequired = options.isRequired || null;
       showValidationMessage = options.showValidationMessage || false;
-      validationMessageCss = options.validationMessageCss || nulll;
+      validationMessageCss = options.validationMessageCss || null;
       validationMessageText = options.validationMessageText || null;
       placeholder = options.placeholder || '';
       shouldRepopulateOnRemove = options.shouldRepopulateOnRemove || true;
@@ -227,7 +229,13 @@ function Shizzle(id, dataFields, options){
 
     $items.empty();
 
-    _.forEach(data, function (item) {
+    // Only get unique array items.
+    // This will avoid any side-effects or bugs from
+    // consuming clients that may cause duplicate items
+    // to display in the list
+    var uniqueItems = _.uniqBy(data, dataValue);
+
+    _.forEach(uniqueItems, function (item) {
       $items.append("<li data-value='" + item[dataValue] + "' data-value-2='" + item[dataValue2] + "' data-value-3='" + item[dataValue3] + "' data-value-4='" + item[dataValue4] + "'>" + item[dataText] + '</li>');
     });
   }
@@ -326,7 +334,27 @@ function Shizzle(id, dataFields, options){
     $('.' + validationMessageCss).hide();
   }
 
+  function doesItemExist(items, item){
+    var itemExists = false;
+    
+    // Verify if item already exists in filtered array
+    _.forEach(items, function (filteredItem) {
+        if (filteredItem.value.toLowerCase() === item.value.toLowerCase())
+            itemExists = true;
+    });
+
+    return itemExists;
+  }
+
+
   this.addPill = function(selectedItem){
+    // Ensure we don't add duplicates
+    var itemExists = doesItemExist(self.pills, selectedItem);
+    
+    if (itemExists)
+        return;
+
+
     self.pills.push(selectedItem);
 
     var pillElement = document.createElement('li');
@@ -427,7 +455,6 @@ Shizzle.prototype.fireValidation = function(){
 Shizzle.prototype.validate = function(){
   this.validateControl();
 };
-
 
 
 module.exports = Shizzle;
