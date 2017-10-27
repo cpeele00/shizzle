@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
+//Shizzle@1.1.5
 
 function Shizzle(id, dataFields, options){
   'use strict';
@@ -72,7 +73,12 @@ function Shizzle(id, dataFields, options){
 
     // Set data source
     self.dataSource = _.sortBy(data, ['text']);
-    self.items = _.cloneDeep(self.dataSource);
+    var itemsToVerify = _.cloneDeep(self.dataSource);
+    
+    // Ensure that none of the data items are undefined 
+    // nor have undefined or null properties
+    self.items = verifyData(itemsToVerify);
+
 
     // Create Elements
     var select = document.getElementById(id);
@@ -130,6 +136,11 @@ function Shizzle(id, dataFields, options){
 
       // Iterate through our items and verify if matching the filter
       _.forEach(self.items, function (item) {
+        if (!item)
+          return;
+
+        if (!item[dataText] || !item[dataValue])
+          return;
 
         // Add the item to the filtered items list if the entered value is present in
         // the provided dataText property value
@@ -197,6 +208,25 @@ function Shizzle(id, dataFields, options){
   // Helpers
   //
 
+  function verifyData(items){
+    if (!items || items.length === 0)
+      return;
+
+    var verifiedItems = [];
+
+    _.forEach(items, function(item){
+      if (!item)
+        return;
+      
+      if (!item[dataText] || !item[dataValue])
+        return;
+
+      verifiedItems.push(item);
+    });
+
+    return verifiedItems;
+  }
+
   function setDataFields(dataFields){
     //TODO: look at removing this since we are already checking for it when initializing
     if (dataFields) {
@@ -236,6 +266,12 @@ function Shizzle(id, dataFields, options){
     var uniqueItems = _.uniqBy(data, dataValue);
 
     _.forEach(uniqueItems, function (item) {
+      if (!item)
+        return;
+
+      if (!item[dataValue] || !item[dataText])
+        return;
+
       $items.append("<li data-value='" + item[dataValue] + "' data-value-2='" + item[dataValue2] + "' data-value-3='" + item[dataValue3] + "' data-value-4='" + item[dataValue4] + "'>" + item[dataText] + '</li>');
     });
   }
@@ -337,10 +373,22 @@ function Shizzle(id, dataFields, options){
   function doesItemExist(items, item){
     var itemExists = false;
     
+    if (!item)
+      return;
+
+    if (!item.value)
+      return;
+
     // Verify if item already exists in filtered array
     _.forEach(items, function (filteredItem) {
+        if (!filteredItem)
+          return;
+
+        if (!filteredItem.value)
+          return;
+
         if (filteredItem.value.toLowerCase() === item.value.toLowerCase())
-            itemExists = true;
+          itemExists = true;
     });
 
     return itemExists;
@@ -348,6 +396,12 @@ function Shizzle(id, dataFields, options){
 
 
   this.addPill = function(selectedItem){
+    if (!selectedItem)
+      return;
+
+    if (!selectedItem.value || !selectedItem.text)
+      return;
+
     // Ensure we don't add duplicates
     var itemExists = doesItemExist(self.pills, selectedItem);
     
@@ -455,6 +509,5 @@ Shizzle.prototype.fireValidation = function(){
 Shizzle.prototype.validate = function(){
   this.validateControl();
 };
-
 
 module.exports = Shizzle;
