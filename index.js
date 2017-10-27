@@ -1,8 +1,7 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
-//Shizzle@1.1.5
-
+//Shizzle@1.1.6
 function Shizzle(id, dataFields, options){
   'use strict';
 
@@ -387,7 +386,10 @@ function Shizzle(id, dataFields, options){
         if (!filteredItem.value)
           return;
 
-        if (filteredItem.value.toLowerCase() === item.value.toLowerCase())
+        var filteredItemValue = _.isString(filteredItem.value) ? filteredItem.value.toLowerCase() : filteredItem.value;          
+        var itemValue = _.isString(item.value) ? item.value.toLowerCase() : item.value;
+          
+        if (filteredItemValue === itemValue)
           itemExists = true;
     });
 
