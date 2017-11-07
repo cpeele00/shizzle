@@ -1,16 +1,29 @@
 {
   "name": "shizzle",
-  "version": "1.1.6",
+  "version": "2.0.0",
   "description": "a simple multiselect control with a simple api",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "multiselect", "multi-select", "fast-filter", "fastfilter", "multiselect component", "multi-select component", "multiselect control", "multi-select control"
+    "multiselect",
+    "multi-select",
+    "fast-filter",
+    "fastfilter",
+    "multiselect component",
+    "multi-select component",
+    "multiselect control",
+    "multi-select control"
   ],
   "readmeFilename": "README.md",
-  "files": ["index.js", "shizzle.css", "README.md", "dist", "shizzle.gif"],
+  "files": [
+    "index.js",
+    "shizzle.css",
+    "README.md",
+    "dist",
+    "shizzle.gif"
+  ],
   "author": "Chris Peele aka Sweet Biscuits",
   "license": "ISC",
   "repository": {

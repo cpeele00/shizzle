@@ -1,8 +1,8 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
-//Shizzle@1.1.6
-function Shizzle(id, dataFields, options){
+//Shizzle@2.0.0
+function Shizzle(id, dataFields, options) {
   'use strict';
 
   var self = this;
@@ -24,7 +24,7 @@ function Shizzle(id, dataFields, options){
   var isRequired = false;
   var fieldErrorCss = null;
   var showValidationMessage = false;
-  var validationMessageCss = null; 
+  var validationMessageCss = null;
   var validationMessageText = null;
   var validationTriggered = false;
   var placeholder = '';
@@ -39,11 +39,11 @@ function Shizzle(id, dataFields, options){
   // 
   // INITIALIZE
   //
-  
+
   init();
 
 
-  function init(){
+  function init() {
     if (!id)
       throw new Error('id is required');
 
@@ -54,14 +54,14 @@ function Shizzle(id, dataFields, options){
     setDataFields(dataFields);
 
     // Set options
-    if (options){
+    if (options) {
       data = options.data || null;
       itemsVisibleOnPageLoad = options.itemsVisibleOnPageLoad || false;
       onItemSelected = options.onItemSelected || null;
       onPillRemoved = options.onPillRemoved || null;
       onItemsCleared = options.onItemsCleared || null;
       setToFocusOnPageLoad = options.setToFocusOnPageLoad || false;
-      fieldErrorCss =  options.fieldErrorCss || null;
+      fieldErrorCss = options.fieldErrorCss || null;
       isRequired = options.isRequired || null;
       showValidationMessage = options.showValidationMessage || false;
       validationMessageCss = options.validationMessageCss || null;
@@ -73,7 +73,7 @@ function Shizzle(id, dataFields, options){
     // Set data source
     self.dataSource = _.sortBy(data, ['text']);
     var itemsToVerify = _.cloneDeep(self.dataSource);
-    
+
     // Ensure that none of the data items are undefined 
     // nor have undefined or null properties
     self.items = verifyData(itemsToVerify);
@@ -113,7 +113,7 @@ function Shizzle(id, dataFields, options){
     bindEvents();
   }
 
-  function bindEvents(){
+  function bindEvents() {
     handleSearchBoxKeyupAndChange();
     handleKeypress();
     handleOutsideClicked();
@@ -127,8 +127,8 @@ function Shizzle(id, dataFields, options){
   // Events
   //
 
-  function handleSearchBoxKeyupAndChange(){
-    $searchBox.on('keyup change', function(e) {
+  function handleSearchBoxKeyupAndChange() {
+    $searchBox.on('keyup change', function (e) {
       // Clear temporary array
       self.filteredItems.length = 0;
       $items.empty();
@@ -155,7 +155,7 @@ function Shizzle(id, dataFields, options){
   }
 
   function handleKeypress() {
-    $searchBox.on('keypress', function(e) {
+    $searchBox.on('keypress', function (e) {
       // If the list is not visible show it
       // when the user types in the input field
       if ($items.not(':visible'))
@@ -164,13 +164,13 @@ function Shizzle(id, dataFields, options){
   }
 
   function handleOutsideClicked() {
-    $(document).click(function() {
+    $(document).click(function () {
       $items.hide();
     });
   }
 
   function handleSearchBoxclicked() {
-    $searchBox.click(function(e) {
+    $searchBox.click(function (e) {
       e.stopPropagation();
 
       $items.toggle();
@@ -178,7 +178,7 @@ function Shizzle(id, dataFields, options){
   }
 
   function handleItemSelected() {
-    $(document).on('click', '#shizzle-container-' + id + ' .sz-choices li', function() {
+    $(document).on('click', '#shizzle-container-' + id + ' .sz-choices li', function () {
 
       // Get the selectedItem text
       self.selectedItem = {
@@ -196,6 +196,14 @@ function Shizzle(id, dataFields, options){
 
       self.addPill(self.selectedItem);
 
+      // Remove item from self.items
+      _.remove(self.items, function (item) {
+        return item.id === self.selectedItem.value.toString();
+      });
+
+      if (self.items)
+        populateList(self.items);
+
       // Fire onItemSelected callback if provided
       if (onItemSelected)
         onItemSelected();
@@ -207,16 +215,16 @@ function Shizzle(id, dataFields, options){
   // Helpers
   //
 
-  function verifyData(items){
+  function verifyData(items) {
     if (!items || items.length === 0)
       return;
 
     var verifiedItems = [];
 
-    _.forEach(items, function(item){
+    _.forEach(items, function (item) {
       if (!item)
         return;
-      
+
       if (!item[dataText] || !item[dataValue])
         return;
 
@@ -226,7 +234,7 @@ function Shizzle(id, dataFields, options){
     return verifiedItems;
   }
 
-  function setDataFields(dataFields){
+  function setDataFields(dataFields) {
     //TODO: look at removing this since we are already checking for it when initializing
     if (dataFields) {
       if (!dataFields.dataValue)
@@ -243,7 +251,7 @@ function Shizzle(id, dataFields, options){
     }
   }
 
-  function createMainShizzleContainer(mainSelectElement, id){
+  function createMainShizzleContainer(mainSelectElement, id) {
     var selectContainer = document.createElement('div');
     selectContainer.id = 'shizzle-container-' + id;
     selectContainer.className = 'shizzlex';
@@ -262,7 +270,8 @@ function Shizzle(id, dataFields, options){
     // This will avoid any side-effects or bugs from
     // consuming clients that may cause duplicate items
     // to display in the list
-    var uniqueItems = _.uniqBy(data, dataValue);
+    var verifiedItems = verifyData(data);
+    var uniqueItems = _.uniqBy(verifiedItems, dataValue.toString());
 
     _.forEach(uniqueItems, function (item) {
       if (!item)
@@ -275,11 +284,11 @@ function Shizzle(id, dataFields, options){
     });
   }
 
-  function handlePillClicked(){
-    $(document).on('click', '#shizzle-container-' + id + ' .sz-pills li', function(e) {
-      
+  function handlePillClicked() {
+    $(document).on('click', '#shizzle-container-' + id + ' .sz-pills li', function (e) {
+
       var selectedPill = {};
-      selectedPill[dataValue] = $(this).data('value');
+      selectedPill[dataValue] = $(this).data('value').toString();
       selectedPill[dataText] = $(this).data('text');
       selectedPill[dataValue2] = $(this).attr('data-value-2');
       selectedPill[dataValue3] = $(this).attr('data-value-3');
@@ -288,17 +297,17 @@ function Shizzle(id, dataFields, options){
       var result = true;
 
       if ($.isFunction(shouldRepopulateOnRemove))
-        shouldRepopulateOnRemove(selectedPill);		
-      else		
-        result = shouldRepopulateOnRemove;		
+        shouldRepopulateOnRemove(selectedPill);
+      else
+        result = shouldRepopulateOnRemove;
 
 
       if (result)
         self.items.push(selectedPill);
 
 
-      _.remove(self.pills, function(pill){
-        return pill.value === selectedPill[dataValue];
+      _.remove(self.pills, function (pill) {
+        return pill.value.toString() === selectedPill[dataValue];
       });
 
       var pillElementToRemove = $('[data-value="' + selectedPill[dataValue] + '"]');
@@ -335,11 +344,11 @@ function Shizzle(id, dataFields, options){
     referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
   }
 
-  function fireValidation(){
-    if (isRequired){
+  function fireValidation() {
+    if (isRequired) {
       validationTriggered = true;
 
-      if (self.pills.length === 0){
+      if (self.pills.length === 0) {
         self.$pillContainer.addClass(fieldErrorCss);
 
         if (showValidationMessage)
@@ -351,7 +360,7 @@ function Shizzle(id, dataFields, options){
     }
   }
 
-  function createValidationMessage(){
+  function createValidationMessage() {
     var spanMessage = document.createElement('span');
     spanMessage.className = 'shizzlex sz-validation-message ' + validationMessageCss;
     spanMessage.innerText = validationMessageText;
@@ -361,17 +370,17 @@ function Shizzle(id, dataFields, options){
     insertAfter(spanMessage, parentEl);
   }
 
-  function showValidationMessageText(){
+  function showValidationMessageText() {
     $('.' + validationMessageCss).show();
   }
 
-  function hideValidationMessageText(){
+  function hideValidationMessageText() {
     $('.' + validationMessageCss).hide();
   }
 
-  function doesItemExist(items, item){
+  function doesItemExist(items, item) {
     var itemExists = false;
-    
+
     if (!item)
       return;
 
@@ -380,24 +389,24 @@ function Shizzle(id, dataFields, options){
 
     // Verify if item already exists in filtered array
     _.forEach(items, function (filteredItem) {
-        if (!filteredItem)
-          return;
+      if (!filteredItem)
+        return;
 
-        if (!filteredItem.value)
-          return;
+      if (!filteredItem.value)
+        return;
 
-        var filteredItemValue = _.isString(filteredItem.value) ? filteredItem.value.toLowerCase() : filteredItem.value;          
-        var itemValue = _.isString(item.value) ? item.value.toLowerCase() : item.value;
-          
-        if (filteredItemValue === itemValue)
-          itemExists = true;
+      var filteredItemValue = _.isString(filteredItem.value) ? filteredItem.value.toLowerCase() : filteredItem.value;
+      var itemValue = _.isString(item.value) ? item.value.toLowerCase() : item.value;
+
+      if (filteredItemValue === itemValue)
+        itemExists = true;
     });
 
     return itemExists;
   }
 
 
-  this.addPill = function(selectedItem){
+  this.addPill = function (selectedItem) {
     if (!selectedItem)
       return;
 
@@ -406,9 +415,9 @@ function Shizzle(id, dataFields, options){
 
     // Ensure we don't add duplicates
     var itemExists = doesItemExist(self.pills, selectedItem);
-    
+
     if (itemExists)
-        return;
+      return;
 
 
     self.pills.push(selectedItem);
@@ -426,7 +435,7 @@ function Shizzle(id, dataFields, options){
 
     $pills = $('#shizzle-container-' + id).find('.sz-pill');
 
-    _.remove(self.items, function(item){
+    _.remove(self.items, function (item) {
       return item[dataValue] === selectedItem.value;
     });
 
@@ -439,7 +448,7 @@ function Shizzle(id, dataFields, options){
     populateList(self.items);
   };
 
-  this.clearData = function(){
+  this.clearData = function () {
     self.dataSource = null;
     self.items = null;
     self.pills.length = 0;
@@ -455,7 +464,7 @@ function Shizzle(id, dataFields, options){
       onItemsCleared();
   };
 
-  this.populateWithData = function(data) {
+  this.populateWithData = function (data) {
     // Set data source
     self.dataSource = _.sortBy(data, ['text']);
     self.items = _.cloneDeep(self.dataSource);
@@ -463,7 +472,7 @@ function Shizzle(id, dataFields, options){
     populateList(self.items);
   };
 
-  this.validateControl = function(){
+  this.validateControl = function () {
     fireValidation();
   };
 };
@@ -474,27 +483,27 @@ function Shizzle(id, dataFields, options){
 //
 
 
-Shizzle.prototype.getSelectedItems = function(){
+Shizzle.prototype.getSelectedItems = function () {
   return this.pills;
 };
 
-Shizzle.prototype.setSelectedItems = function(selectedItems){
+Shizzle.prototype.setSelectedItems = function (selectedItems) {
   var self = this;
-  _.forEach(selectedItems, function(item) {
+  _.forEach(selectedItems, function (item) {
     self.addPill(item);
   });
 };
 
-Shizzle.prototype.clear = function() {
+Shizzle.prototype.clear = function () {
   this.clearData();
 };
 
-Shizzle.prototype.populate = function(data) {
+Shizzle.prototype.populate = function (data) {
   this.populateWithData(data);
 };
 
-Shizzle.prototype.isValid = function(){
-  if(this.pills.length === 0)
+Shizzle.prototype.isValid = function () {
+  if (this.pills.length === 0)
     return false;
   else
     return true;
@@ -503,12 +512,12 @@ Shizzle.prototype.isValid = function(){
 /**
  * @deprecated Since version 1.1.0 Will be deleted in version 1.2.0 Use validate() instead.
  */
-Shizzle.prototype.fireValidation = function(){
+Shizzle.prototype.fireValidation = function () {
   console.warn('fireValidation is deprecated since version 1.1.0 . Use validate() instead.');
   this.validateControl();
 };
 
-Shizzle.prototype.validate = function(){
+Shizzle.prototype.validate = function () {
   this.validateControl();
 };
 
